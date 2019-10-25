@@ -3,6 +3,22 @@ package stor
 import "github.com/brianvoe/gofakeit"
 
 func (s *Storage) Seed() error {
+	if err := s.db.Delete(&User{}).Error; err != nil {
+		return err
+	}
+	user := User{
+		Username: "test",
+		Email:    "test@example.com",
+		Bio:      gofakeit.Sentence(45),
+		Image:    nil,
+	}
+	if err := user.SetPassword("test"); err != nil {
+		return err
+	}
+	if err := s.UserCreate(&user); err != nil {
+		return err
+	}
+
 	if err := s.db.Delete(&Article{}).Error; err != nil {
 		return err
 	}

@@ -11,6 +11,9 @@ type Storage struct {
 }
 
 func (s *Storage) Migrate() error {
+	if err := s.db.AutoMigrate(&User{}).Error; err != nil {
+		return err
+	}
 	if err := s.db.AutoMigrate(&Article{}).Error; err != nil {
 		return err
 	}
