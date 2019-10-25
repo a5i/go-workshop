@@ -13,7 +13,7 @@ func mainImpl() error {
 	if err := s.SetupAPI(e); err != nil {
 		return err
 	}
-
+	e.Static("/", "static")
 	return e.Start(":3333")
 }
 
