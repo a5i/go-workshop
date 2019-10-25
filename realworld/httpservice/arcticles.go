@@ -2,23 +2,14 @@ package httpservice
 
 import (
 	"net/http"
-	"time"
 
-	"github.com/brianvoe/gofakeit"
+	"example.com/realworld/stor"
 	"github.com/labstack/echo"
 )
 
 type article struct {
-	Slug           string    `json:"slug"`
-	Title          string    `json:"title"`
-	Description    string    `json:"description"`
-	Body           string    `json:"body"`
-	TagList        []string  `json:"tagList"`
-	CreatedAt      time.Time `json:"createdAt"`
-	UpdatedAt      time.Time `json:"updatedAt"`
-	Favorited      bool      `json:"favorited"`
-	FavoritesCount int       `json:"favoritesCount"`
-	Author         struct {
+	stor.Article
+	Author struct {
 		Username  string `json:"username"`
 		Bio       string `json:"bio"`
 		Image     string `json:"image"`
@@ -33,16 +24,16 @@ type articleListResponse struct {
 
 func (s *Service) ArticleList(c echo.Context) error {
 	var resp articleListResponse
-	for i := 0; i < gofakeit.Number(10, 20); i++ {
-		a := article{
-			Slug:        gofakeit.BeerName(),
-			Title:       gofakeit.Sentence(4),
-			Description: gofakeit.Sentence(5),
-			Body:        gofakeit.Paragraph(1, 7, 5, "\n"),
-			CreatedAt:   gofakeit.Date(),
-			UpdatedAt:   gofakeit.Date(),
+	articles, total, err := s.Stor.ArticleList(stor.ArticleListParams{})
+	if err != nil {
+		return err
+	}
+	resp.ArticlesCount = total
+	for _, a := range articles {
+		art := article{
+			Article: a,
 		}
-		resp.Articles = append(resp.Articles, a)
+		resp.Articles = append(resp.Articles, art)
 	}
 	return c.JSON(http.StatusOK, resp)
 }
