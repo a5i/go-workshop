@@ -1,4 +1,4 @@
-__# Step 3. Organize the project
+# Step 3. Organize the project
 
 ```shell script
 mkdir httpservice
@@ -28,7 +28,7 @@ func (s *Service) SetupAPI(e *echo.Echo) error {
 }
 ```
 
-**cmd.main.go**
+**cmd/main.go**
 
 ```go
 package main
