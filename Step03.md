@@ -28,7 +28,7 @@ func (s *Service) SetupAPI(e *echo.Echo) error {
 }
 ```
 
-**cmd.main.go**
+**cmd/main.go**
 
 ```go
 package main
