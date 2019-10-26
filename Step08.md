@@ -49,7 +49,7 @@ func (s *Storage) UserGetByEmail(email string) (user User, err error) {
 }
 ```
 
-Update **stor/storage.go**
+Update **stor/stor.go**
 
 ```go
 func (s *Storage) Migrate() error {
