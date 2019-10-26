@@ -30,6 +30,7 @@ func (s *Service) ArticleList(c echo.Context) error {
 		return err
 	}
 	resp.ArticlesCount = total
+	resp.Articles = make([]article, 0, len(articles))
 	for _, a := range articles {
 		art := article{
 			Article: a,

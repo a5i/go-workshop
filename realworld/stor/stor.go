@@ -20,6 +20,16 @@ func (s *Storage) Migrate() error {
 	return nil
 }
 
+func (s *Storage) Clear() error {
+	if err := s.db.Delete(&User{}).Error; err != nil {
+		return err
+	}
+	if err := s.db.Delete(&Article{}).Error; err != nil {
+		return err
+	}
+	return nil
+}
+
 func New() (*Storage, error) {
 	db, err := gorm.Open("sqlite3", "realworld.db")
 	if err != nil {

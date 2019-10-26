@@ -1,20 +1,42 @@
-package main
+# Step 10. Update tests
 
-import (
-	"log"
-	"net/http/httptest"
-	"os"
-	"testing"
+Try to run
 
-	"example.com/realworld/httpservice"
-	"example.com/realworld/stor"
-	"github.com/brianvoe/gofakeit"
-	"github.com/labstack/echo"
-	"gopkg.in/gavv/httpexpect.v2"
-)
+```shell script
+go test example.com/realworld/cmd
+```
 
-var serverURL string
+Update **stor/stor.go**
 
+```go
+func (s *Storage) Clear() error {
+	if err := s.db.Delete(&User{}).Error; err != nil {
+		return err
+	}
+	if err := s.db.Delete(&Article{}).Error; err != nil {
+		return err
+	}
+	return nil
+}
+```
+
+
+Update **httpservice/arcticles.go**
+
+```go
+func (s *Service) ArticleList(c echo.Context) error {
+	// ...
+	resp.ArticlesCount = total
+	resp.Articles = make([]article, 0, len(articles))
+	// ..
+	return c.JSON(http.StatusOK, resp)
+}
+```
+
+
+Update **cmd/main_test.go**
+
+```go
 func TestMain(m *testing.M) {
 	gofakeit.Seed(0)
 	e := echo.New()
@@ -44,3 +66,5 @@ func TestArticles(t *testing.T) {
 	r := e.GET("/api/articles").Expect().JSON()
 	r.Path("$.articles").Array().Length().Equal(0)
 }
+
+```
